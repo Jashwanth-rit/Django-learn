@@ -1,0 +1,47 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Venues</h1>
+    <ul class="list-group">
+      {% for venue in venue_list %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <a href="{% url 'venuedetailes' venue.id %}" class="text-decoration-none">{{ venue.name }}</a>
+        
+        <div>
+          <a href="{% url 'updatevenue' venue.id %}" class="btn btn-secondary">Update</a>
+          <a href="{% url 'deletevenue' venue.id %}" class="btn btn-danger">Delete</a>
+        </div>
+      
+      </li>
+      {% endfor %}
+    </ul>
+
+    <br><br>
+
+    <center><div>
+      {%if venue_list.has_previous %}
+         <!-- <a href="?page=1"> first page</a> -->
+         <a href="?page={{venue_list.previous_page_number}}">Previous </a>
+         {%endif%}
+
+          Page {{venue_list.number}} of {{venue_list.paginator.num_pages}}
+          
+        
+        {%if venue_list.next_page_number < venue_list.paginator.num_pages %}
+        <a href="?page={{
+          venue_list.next_page_number
+
+        }}">next first</a>
+        {%endif%}
+        {%if venue_list.next_page_number ==  venue_list.paginator.num_pages %}
+        <a href="?page={{venue_list.paginator.num_pages}}">last page</a> 
+        {%endif%}
+
+    </div></center>
+  </div>
+ 
+
+
+
+{% endblock %}

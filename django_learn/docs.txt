@@ -1,0 +1,6 @@
+python manage.py runserver - to start python or current server or to exicute code
+python manage.py migrate - to push table into database of django
+python manage.py makemigrations - to make migration mean , to push table or make table in admin area or backend side.
+winpty python manage.py createsuperuser - to create admin user mean super user.
+python manage.py startapp events - to create app means web app to code in it
+django-admin startproject django_learn - to create folder
