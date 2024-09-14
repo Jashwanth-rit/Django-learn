@@ -4,3 +4,12 @@ python manage.py makemigrations - to make migration mean , to push table or make
 winpty python manage.py createsuperuser - to create admin user mean super user.
 python manage.py startapp events - to create app means web app to code in it
 django-admin startproject django_learn - to create folder
+
+
+
+Upgrades can be done-
+add-event :- manager column should be filled with the person who have loged in
+ impliment same for venue as events
+
+after Adding - redirect to same page with empty column
+

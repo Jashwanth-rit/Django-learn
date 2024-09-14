@@ -1,17 +1,23 @@
 {% extends 'events/base.html' %}
 
 {% block content %}
-  <center>
-   <h1>Venue:</h1>
-<ul>
-  <li>{{venue.name}}</li>
-  <li>{{venue.address}}</li>
-  <li>{{venue.zip_code}}</li>
-  <li>{{venue.web}}</li>
-  <li>{{venue.email_address}}</li>
-  
-</ul>
-
-
-  </center>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title text-center">Venue Details</h1>
+          <ul class="list-group list-group-flush mt-4">
+            <li class="list-group-item"><strong>Name:</strong> {{ venue.name }}</li>
+            <li class="list-group-item"><strong>Address:</strong> {{ venue.address }}</li>
+            <li class="list-group-item"><strong>Zip Code:</strong> {{ venue.zip_code }}</li>
+            <li class="list-group-item"><strong>Website:</strong> <a href="{{ venue.web }}" target="_blank">{{ venue.web }}</a></li>
+            <li class="list-group-item"><strong>Email:</strong> <a href="mailto:{{ venue.email_address }}">{{ venue.email_address }}</a></li>
+            <li class="list-group-item"><strong>owner:</strong> {{ venue_owner }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

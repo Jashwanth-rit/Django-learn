@@ -47,9 +47,11 @@ urlpatterns = [
        path('delete_event/<venue_id>',views.deleteevent,name="deleteevent"),
         path('delete_venue/<venue_id>',views.deletevenue,name="deletevenue"),
      path('search',views.search,name="search"),
+      path('searchEvent',views.searchEvent,name="searchEvent"),
  path('venue_csv',views.venuecsv,name="venuecsv"),
 
 path('venue_text',views.venuetext,name="venuetext"),
+path('myevents',views.myevents,name="myevents"),
 
 path('venue_pdf',views.venuepdf,name="venuepdf"),
 ]

@@ -4,8 +4,9 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event
 from .models import Venue
+from django.contrib import messages
 from .forms import VenueForm
-from .forms import EventForm
+from .forms import EventForm,EventAdminForm
 from django.http import HttpResponseRedirect,HttpResponse
 import csv
 
@@ -14,6 +15,9 @@ import io
 from reportlab.pdfgen import canvas 
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+from django.db import models
+from django.contrib.auth.models import User
+# Create your models here.
 
 # importing paginator
 
@@ -118,26 +122,67 @@ def search(req):
        
     })
 
+
+def searchEvent(req):
+    if req.method == 'POST':
+        search = req.POST['search']
+        event_list = Event.objects.filter(name__contains = search)
+        return render(req, "events/events.html", {
+        
+        'search':search,
+        'event_list':event_list
+       
+    })
+    else:
+         event_list = Event.objects.all()
+         return render(req, "events/search.html", {
+        
+        'search':search,
+        'event_list':event_list
+       
+    })
+
 def deleteevent(req,venue_id):
     venue  = Event.objects.get(pk = venue_id)
-    venue.delete()
+    if venue.manager == req.user:
+        venue.delete()
+        messages.success(req,("Event deleted!"))
+    else:
+        messages.success(req,("You are not athorised to delete this Event!"))
+       
+      
 
     return redirect('event-list')
 
 def deletevenue(req,venue_id):
     venue  = Venue.objects.get(pk = venue_id)
-    venue.delete()
+    if  venue.owner == req.user.id:
+        venue.delete()
+        messages.success(req,("Venue deleted!"))
+    else:
+        messages.success(req,("You are not athorised to delete this Venue!"))
+       
 
     return redirect('venues')
 
 def venuedetails(req,venue_id):
     venue  = Venue.objects.get(pk = venue_id)
+    venue_owner = User.objects.get(pk = venue.owner);
     return render(req, "events/venuedetails.html", {
-        'venue':venue
+        'venue':venue,
+        'venue_owner':venue_owner,
 
         
        
     })
+
+def myevents(req):
+        if req.user.is_authenticated:
+            events =  Event.objects.filter(attendees = req.user.id)
+            return render(req,'events/myevents.html',{
+                'events':events
+    })
+
 def updatevenue(req,venue_id):
     venue  = Venue.objects.get(pk = venue_id)
     form  = VenueForm(req.POST or None,instance=venue)
@@ -188,7 +233,9 @@ def add_venue(req):
     if req.method == "POST":
         form = VenueForm(req.POST)
         if form.is_valid():
-            form.save()
+            venue = form.save(commit=False)
+            venue.owner = req.user.id
+            venue.save()
             return HttpResponseRedirect('/add-venue?submitted=True')
     else:
         form  = VenueForm
@@ -201,23 +248,40 @@ def add_venue(req):
 
         })
 
+
+
 def add_event(req):
     submitted = False
     if req.method == "POST":
-        form = EventForm(req.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/add-event?submitted=True')
-    else:
-        form  = EventForm
-        if 'submitted' in req.GET:
-            submitted = True;
-    return render(req,'events/add_events.html',{
-        'form':form,
-        'submitted':submitted
-        
+        if req.user.id == 1:
 
-        })
+
+            form = EventAdminForm(req.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/add-event?submitted=True')
+        else:
+            form = EventForm(req.POST)
+            if form.is_valid():
+                event = form.save(commit=False)
+                event.manager = req.user  # Set the manager to the logged-in user
+                event.save()
+                return HttpResponseRedirect('/add-event?submitted=True')
+
+    else:
+        if req.user.id == 1:
+            form = EventAdminForm()  # Initialize the form properly
+            if 'submitted' in req.GET:
+                submitted = True
+        else:
+            form = EventForm()  # Initialize the form properly
+            if 'submitted' in req.GET:
+                submitted = True
+    return render(req, 'events/add_events.html', {
+        'form': form,
+        'submitted': submitted
+    })
+
 
 
 def home(req, year=datetime.now().year, month=datetime.now().strftime('%B')):

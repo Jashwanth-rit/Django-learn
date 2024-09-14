@@ -1,21 +1,24 @@
 {% extends 'events/base.html' %}
 
 {% block content %}
-  <center>
-    {% if search%}
-      <h1>Your search results..</h1>
-      <ul>
-        {% for venue in venues %}
-        <li><a href="{% url 'venuedetailes' venue.id %}">{{venue.name}}</a></li>
-        {% endfor %}
-      </ul>
-   {%else%}
-      <h1>hey! you forgot to search! oh noo...</h1>
-   {%endif%}
-
-<br><br>
-
-
-
-  </center>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+      {% if search %}
+        <h1 class="mb-4">Your Search Results</h1>
+        <ul class="list-group">
+          {% for venue in venues %}
+            <li class="list-group-item">
+              <a href="{% url 'venuedetailes' venue.id %}" class="btn btn-link">{{ venue.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="alert alert-warning mt-4" role="alert">
+          <h1>Hey! You forgot to search! Oh no...</h1>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}

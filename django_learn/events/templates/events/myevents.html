@@ -1,15 +1,11 @@
 {% extends 'events/base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %} 
 <div class="container mt-5">
   <h1 class="text-center mb-4">Events</h1>
-  <form class="d-flex" role="search" method="POST" action="{% url 'searchEvent' %}">
-    {%csrf_token%}
-    <input class="form-control me-2" type="search" placeholder="Search-Event" aria-label="Search" name="search">
-    <button class="btn btn-outline-success" type="submit">Search</button>
-  </form>
-  <br>
-  {% for event in event_list %}
+  
+  {% for event in events %}
   <div class="card mb-4">
     <div class="card-header">
       <h3>{{ event }}</h3>
@@ -43,4 +39,11 @@
   {% endfor %}
   
 </div>
+{%else%}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Login to access this page!</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{%endif%}
+
 {% endblock %}

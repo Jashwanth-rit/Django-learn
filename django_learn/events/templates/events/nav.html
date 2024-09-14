@@ -13,13 +13,52 @@
             <a class="nav-link" href="{% url  'home' '2005' 'june'%}">June</a>
           </li>
 
+        
+
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Events
+          </button>
+          <ul class="dropdown-menu dropdown-menu-light">
+            <li><a class="dropdown-item" href="{% url  'event-list'%}">Event-list</a></li>
+            <li><a class="dropdown-item" href="{% url  'add-event'%}">Add-event</a></li>
+            <li><a class="dropdown-item" href="{% url  'myevents'%}">My-event</a></li>
+           
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+           Venue
+          </button>
+          <ul class="dropdown-menu dropdown-menu-light">
+            <li><a class="dropdown-item" href="{% url  'venues'%}">Venue-list</a></li>
+            <li><a class="dropdown-item" href="{% url  'add-venue'%}">Add-venue</a></li>
+           
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Downloads
+          </button>
+          <ul class="dropdown-menu dropdown-menu-light">
+            <li><a class="dropdown-item" href="{% url  'venuetext'%}">Venues-text</a></li>
+            <li><a class="dropdown-item" href="{% url  'venuecsv'%}">Venues-csv</a></li>
+            <li><a class="dropdown-item" href="{% url  'venuepdf'%}">Venues-pdf</a></li>
+           
+          </ul>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url  'logout' %}">Logout</a>
+          </li>
+          {% else %}
           <li class="nav-item dropdown">
             <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               Events
             </button>
             <ul class="dropdown-menu dropdown-menu-light">
               <li><a class="dropdown-item" href="{% url  'event-list'%}">Event-list</a></li>
-              <li><a class="dropdown-item" href="{% url  'add-event'%}">Add-event</a></li>
              
             </ul>
           </li>
@@ -29,11 +68,11 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-light">
               <li><a class="dropdown-item" href="{% url  'venues'%}">Venue-list</a></li>
-              <li><a class="dropdown-item" href="{% url  'add-venue'%}">Add-venue</a></li>
+            
              
             </ul>
           </li>
-
+  
           <li class="nav-item dropdown">
             <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             Downloads
@@ -45,24 +84,24 @@
              
             </ul>
           </li>
-
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url  'logout' %}">Logout</a>
-          </li>
-          {%else%}
           <li class="nav-item">
             <a class="nav-link" href="{% url  'login' %}">Login</a>
           </li>
-          {%endif%}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url  'regist' %}">Register</a>
+          </li>
+          {% endif %}
         
          
         </ul>
+       
         <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">
           {%csrf_token%}
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+          <input class="form-control me-2" type="search" placeholder="Search-Venue" aria-label="Search" name="search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+
+       
       </div>
     </div>
   </nav>

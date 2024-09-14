@@ -6,17 +6,31 @@
 
   <div class="row justify-content-center">
     <div class="col-md-6">
-      {% if submitted %}
-        <div class="alert alert-success" role="alert">
-          Your event was updated successfully!
+      {% if user.is_authenticated %}
+          {% if user ==  event.manager %}
+                {% if submitted %}
+                  <div class="alert alert-success" role="alert">
+                    Your event was updated successfully!
+                  </div>
+                {% else %}
+                  <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit" class="btn btn-secondary btn-block mt-3">
+                  </form>
+                {% endif %}
+          {%else%}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Un-Authorised to update others Events.</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {%endif%}
+      {%else%}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Access denied!</strong> please login.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-      {% else %}
-        <form action="" method="POST">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <input type="submit" value="Submit" class="btn btn-secondary btn-block mt-3">
-        </form>
-      {% endif %}
+      {%endif%}
     </div>
   </div>
 </div>

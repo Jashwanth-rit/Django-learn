@@ -3,21 +3,27 @@
 {% block content %}
 <div class="container mt-5">
   <h1 class="text-center mb-4">Add Event</h1>
-
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      {% if submitted %}
-        <div class="alert alert-success" role="alert">
-          Your event was added successfully!
+  {% if user.is_authenticated %}
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            {% if submitted %}
+              <div class="alert alert-success" role="alert">
+                Your event was added successfully!
+              </div>
+              {% endif %}
+              <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-secondary btn-block mt-3">
+              </form>
+            
+          </div>
         </div>
-      {% else %}
-        <form action="" method="POST">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <input type="submit" value="Submit" class="btn btn-secondary btn-block mt-3">
-        </form>
-      {% endif %}
+  {%else%}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Unable to add  Events without login, login first.</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-  </div>
+    {%endif%}
 </div>
 {% endblock %}
