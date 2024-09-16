@@ -21,6 +21,7 @@ class Venue(models.Model):
     web = models.URLField('website address')
     email_address = models.EmailField('Email')
     owner = models.IntegerField("venue owner",blank=False,default=1)
+    image = models.ImageField("image",null=True,blank=True,upload_to="images/")
 
     def __str__(self):
         return self.name

@@ -185,7 +185,7 @@ def myevents(req):
 
 def updatevenue(req,venue_id):
     venue  = Venue.objects.get(pk = venue_id)
-    form  = VenueForm(req.POST or None,instance=venue)
+    form  = VenueForm(req.POST or None,req.FILES or None,instance=venue)
     if form.is_valid():
             form.save()
             return redirect('venues')
@@ -231,7 +231,7 @@ def venues(req):
 def add_venue(req):
     submitted = False
     if req.method == "POST":
-        form = VenueForm(req.POST)
+        form = VenueForm(req.POST,req.FILES)
         if form.is_valid():
             venue = form.save(commit=False)
             venue.owner = req.user.id

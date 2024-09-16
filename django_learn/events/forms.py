@@ -7,13 +7,14 @@ from .models import Event
 class VenueForm(ModelForm):
     class Meta:
         model = Venue
-        fields = ('name','address','zip_code','web','email_address')  # Gets all the columns
+        fields = ('name','address','zip_code','web','email_address','image')  # Gets all the columns
         labels = {
             'name': '',
             'address': '',
             'zip_code': '',
             'web': '',
             'email_address': '',
+            'image':"",
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Venue name'}),
@@ -21,6 +22,8 @@ class VenueForm(ModelForm):
             'zip_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter zip code'}),
             'web': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Enter website URL'}),
             'email_address': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter email address'}),
+            
+
         }
 
 
