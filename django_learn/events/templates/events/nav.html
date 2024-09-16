@@ -10,7 +10,7 @@
 
           
           <li class="nav-item ">
-            <a class="nav-link" href="{% url  'home' '2005' 'june'%}">June</a>
+            <a class="nav-link" href="{% url  'home' %}">Calender</a>
           </li>
 
         
@@ -24,6 +24,10 @@
             <li><a class="dropdown-item" href="{% url  'event-list'%}">Event-list</a></li>
             <li><a class="dropdown-item" href="{% url  'add-event'%}">Add-event</a></li>
             <li><a class="dropdown-item" href="{% url  'myevents'%}">My-event</a></li>
+            {% if user.is_superuser %}
+            <li><a class="dropdown-item" href="{% url 'admin_aprove' %}">Admin</a></li>
+        {% endif %}
+        
            
           </ul>
         </li>

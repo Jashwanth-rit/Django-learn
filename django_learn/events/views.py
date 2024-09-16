@@ -250,6 +250,95 @@ def add_venue(req):
 
 
 
+def admin_aprove(req):
+    event_list = Event.objects.all().order_by('-event_date')
+    venue_list = Venue.objects.all()
+
+    if req.user.is_superuser:
+        if req.method == "POST":
+            # Approve selected events
+            if 'Uboxes' in req.POST:
+                for event in event_list:
+                    event.approval = False
+                    event.save()
+                id_list = req.POST.getlist('Uboxes')
+                for id in id_list:
+                    event = Event.objects.get(pk=int(id))
+                    event.approval = True
+                    event.save()
+                messages.success(req, 'Selected events approved!')
+                return redirect('event-list')
+
+           
+
+        return render(req, 'events/admin-aprove.html', {
+            'event_list': event_list,
+            'venues': venue_list,
+        })
+
+    else:
+        messages.error(req, 'Unable to access this page, only admins can access.')
+        return redirect('event-list')
+
+def venue_events(req, venue_name):
+    # Filter events by venue name (from the related Venue model)
+    event_list = Event.objects.filter(venue__name__icontains=venue_name)
+    return render(req, 'events/venue_events.html', {
+        'event_list': event_list,
+    })
+
+
+# def venue_events(req,venue_name):
+#     events = Event.objects.filter(venue__contains = venue_name)
+
+#     return render(req,'events/venue_events.html',{
+#         'event_list':events,
+#     })
+
+
+# def admin_aprove(req):
+#     event_list = Event.objects.all().order_by('-event_date')
+#     venue_list = Venue.objects.all()
+#     if req.user.is_superuser:
+#         if req.method == "POST":
+#             id_list = req.POST.getlist('Uboxes')
+#             for id in id_list:
+#                 event = Event.objects.get(pk = int(id))
+#                 event.approval = True
+#                 event.save()
+#             messages.success(req,('Approved!'))
+#             return redirect('event-list')
+        
+#         elif req.method == "PUT":
+#               event_app = Event.objects.filter(approval__contains == True)
+#               for event in event_app:
+#                   event.approval = False
+#                   event.save()
+              
+#               id_list = req.PUT.getlist('Aboxes')
+#               for id in id_list:
+#                   event = Event.objects.get(pk = int(id))
+#                   event.approval = True
+#                   event.save()
+#               messages.success(req,('Un-Approved!'))
+#               return redirect('event-list')
+                  
+
+             
+            
+#         else:
+#             return render(req,'events/admin-aprove.html',{
+#             'event_list':event_list,
+#             'venues':venue_list,
+        
+
+#             })
+#     else:
+#          messages.success(req,('unable to access this page , only admin can access'))
+#          return redirect('event-list')
+
+   
+
 def add_event(req):
     submitted = False
     if req.method == "POST":
@@ -299,7 +388,7 @@ def home(req, year=datetime.now().year, month=datetime.now().strftime('%B')):
     now = datetime.now()  # Get the current datetime
     current_year = now.year
     time = now.strftime('%I:%M:%S %p')  # Format time as a 12-hour clock with AM/PM
-
+    event_list = Event.objects.filter(event_date__year = year,event_date__month = month_num)
     # Render the template and pass the variables
     return render(req, "events/home.html", {
         "name": name,
@@ -308,6 +397,7 @@ def home(req, year=datetime.now().year, month=datetime.now().strftime('%B')):
         "cal": cal,
         "current_year": current_year,
         "time": time,
+        'events':event_list,
     })
 
 

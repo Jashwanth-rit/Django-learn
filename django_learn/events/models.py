@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
@@ -38,8 +39,32 @@ class Event(models.Model):
 
     description = models.TextField(blank=True)
     attendees = models.ManyToManyField(Attenders, blank=True)
+    approval =  models.BooleanField("Approved",default=False,)
 
     def __str__(self):
         return self.name
+    
+    @property
+    def Day_till(self):
+        today = date.today()
+        days_till = self.event_date.date()-today
+        days_till_stripped = str(days_till).split(',',1)[0]
+        return  days_till_stripped
+    
+    @property
+    def Check(self):
+        today = date.today()
+        self.event_date.date()
+       
+        if self.event_date.date() > today:
+            return 'Future'
+        if self.event_date.date() < today:
+            return 'Past'
+        if self.event_date.date() == today:
+            return 'Present'
+
+
+        
+
 
 

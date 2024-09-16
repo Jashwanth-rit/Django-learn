@@ -1,0 +1,68 @@
+{% extends 'events/base.html' %}
+{% block content %}
+{% if user.is_superuser %}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Admin Dashboard</h1>
+
+    <!-- Search Form -->
+    <form class="d-flex mb-4" role="search" method="POST" action="{% url 'searchEvent' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search Event" aria-label="Search" name="search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+
+    <!-- Venue by Events -->
+    <h2 class="text-center mb-4">Venues by Events</h2>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Venues</th>
+                <th scope="col" class="text-center">Events List</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venue in venues %}
+                <tr>
+                    <td>{{ venue.name }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'venue_events' venue.name %}" class="btn btn-primary btn-sm">View Events</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Event Approval -->
+    <h2 class="text-center mt-5 mb-4">Event Approval</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Events</th>
+                    <th scope="col" class="text-center">Approve</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in event_list %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td class="text-center">
+                            <input type="checkbox" value="{{ event.id }}" name="Uboxes"
+                            {% if event.approval %} checked {% endif %}>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-success btn-block mt-3">Approve Selected</button>
+    </form>
+</div>
+
+{% else %}
+<div class="alert alert-danger text-center mt-5" role="alert">
+    <strong>You are unauthorized to approve events.</strong>
+</div>
+{% endif %}
+{% endblock %}
